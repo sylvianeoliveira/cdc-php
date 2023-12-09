@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt" xml:lang="pt" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>CDC</title>
+        <meta charset="utf8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
+        />
+        <script src="js-webshim/minified/polyfiller.js"></script>
+        <style type="text/css">
+            .box {
+                background-color: antiquewhite;
+                box-shadow: 8px 8px 6px grey;
+                width: 450px;
+                border-style: solid;
+                border-width: 3px;
+                border-color: lightblue;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 10px;
+                margin-left: 2px;
+            }
+            body {
+                background-color: #f0f0f2;
+                margin: 0;
+                padding: 2em;
+                font-family: -apple-system, system-ui, BlinkMacSystemFont,
+                    "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial,
+                    sans-serif;
+            }
+            input {
+                margin: 10px 3px 10px 3px;
+                border: 1px solid grey;
+                border-radius: 5px;
+                font-size: 12px;
+                padding: 5px 5px 5px 5px;
+            }
+            label {
+                position: relative;
+                top: 12px;
+                width: 190px;
+                float: left;
+            }
+            #submitButton {
+                width: 80px;
+                margin-left: 20px;
+            }
+            #errorMessage {
+                color: red;
+                font-size: 90% !important;
+            }
+            #successMessage {
+                color: green;
+                font-size: 90% !important;
+                display: block;
+                margin-top: 20px;
+            }
+            .button {
+                font-size: 13px;
+                color: red;
+                background-color: #f8fad7;
+            }
+            .button:hover {
+                background-color: #fadad7;
+            }
+            #draggable {
+                cursor: n-resize;
+            }
+            #cdcfieldset {
+                cursor: move;
+            }
+            input.currency {
+                text-align: left;
+                padding-right: 15px;
+            }
+            .input-group .form-control {
+                float: none;
+            }
+            .input-group .input-buttons {
+                position: relative;
+                z-index: 3;
+            }
+            .messages {
+                text-align: center;
+            }
+            #infoTable{
+                background-color: #bcbcbc;
+                border: 20px solid #005600;
+                border-radius: 50px;
+                display: none;
+                padding: 20px;
+                font-weight: bold;
+                width: 300px;
+                margin-bottom: 20px;
+            }
+            #resultTable{
+                background-color: #bcbcbc;
+                border: 20px solid #001c98;
+                border-radius: 50px;
+                display: none;
+                padding: 20px;
+                font-weight: bold;
+                width: 400px;
+                margin-bottom: 20px;
+            }
+            #priceTable{
+                background-color: #bcbcbc;
+                border: 20px solid #bc0000;
+                border-radius: 50px;
+                display: none;
+                padding: 20px;
+                font-weight: bold;
+                width: 500px;
+                margin-bottom: 20px;
+            }
+            #results{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                align-items: flex-start;
+            }
+            #back{
+                display: none;
+                background-color: #780086;
+                border: none;
+                color: white;
+                padding: 15px 32px;
+                text-align: center;
+                text-decoration: none;
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+            table, td, th, tfoot {border:solid 1px #000; padding:5px;}
+            th {background-color:#999;}
+            caption {font-size:x-large;}
+            colgroup {background:#F60;}
+            .coluna1 {background:#F66;}
+            .coluna2  {background:#F33;}
+            .coluna3  {background:#F99;}
+        </style>
+    </head>
+
+    <body>
+        <button id="back">Voltar para o CDC</button>
+        <fieldset
+            id="cdcfieldset"
+            class="draggable ui-widget-content"
+            style="
+                border: 1px black solid;
+                background-color: #cac3ba;
+                width: 400px;
+            "
+        >
+            <legend
+                style="
+                    border: 5px lightblue solid;
+                    margin-left: 1em;
+                    background-color: #ff6347;
+                    padding: 0.2em 0.8em;
+                "
+            >
+                <strong>Crédito Direto ao Consumidor</strong>
+            </legend>
+            <form id="priceForm" action="../api/server.php" method="post">
+                <div class="box">
+                    <span class="input-group-addon" style="color: antiquewhite"
+                        >$</span
+                    >
+                    <label for="parc">Parcelamento:</label>
+                    <input
+                        id="parc"
+                        type="number"
+                        name="np"
+                        size="5"
+                        value="36"
+                        min="1"
+                        max="72000"
+                        step="1"
+                        required
+                    />meses<br />
+
+                    <span class="input-group-addon" style="color: antiquewhite"
+                        >$</span
+                    >
+                    <label for="itax">Taxa de juros:</label>
+                    <input
+                        id="itax"
+                        type="number"
+                        name="tax"
+                        size="10"
+                        value="0.50"
+                        min="0.0"
+                        max="100.0"
+                        step="any"
+                        required
+                    />% mês<br />
+
+                    <span class="input-group-addon">$</span>
+                    <label for="ipv">Valor Financiado: </label>
+                    <input
+                        id="ipv"
+                        type="number"
+                        name="pv"
+                        value="1000"
+                        min="0.0"
+                        step="0.01"
+                        class="form-control currency"
+                        required
+                    /><br />
+
+                    <span class="input-group-addon">$</span>
+                    <label for="ipp">Valor Final (opcional):</label>
+                    <input
+                        id="ipp"
+                        type="number"
+                        name="pp"
+                        value="0.0"
+                        min="0.0"
+                        step="0.01"
+                        class="form-control currency"
+                        required
+                    /><br />
+
+                    <span class="input-group-addon">$</span>
+                    <label for="ipb">Valor a Voltar(opcional):</label>
+                    <input
+                        id="ipb"
+                        type="number"
+                        name="pb"
+                        value="0.0"
+                        min="0.0"
+                        step="0.01"
+                        class="form-control currency"
+                        required
+                    /><br />                    
+                    
+                    <span class="input-group-addon">$</span>
+                    <label for="ipm">Meses a Voltar(opcional):</label>
+                    <input
+                        id="ipm"
+                        type="number"
+                        name="pb"
+                        value="0"
+                        min="0"
+                        step="1"
+                        class="form-control currency"
+                        required
+                    /><br />
+
+                    <label for="idp">Entrada?</label>
+                    <input id="idp" type="checkbox" name="dp" value="0" /><br />
+
+                    <label for="iip">Imprime?</label>
+                    <input id="iip" type="checkbox" name="ip" value="0" /><br />
+                </div>
+                <div class="messages">
+                    <input
+                        id="submitButton"
+                        class="button"
+                        type="submit"
+                        value="Calcular"
+                    />
+                    <p>(arraste-me para reposicionar a janela)</p>
+                </div>
+            </form>
+
+            <div id="errorMessage" class="messages"></div>
+            <div id="successMessage" class="messages">
+                <p>
+                    Se não souber a taxa de juros coloque 0%, e forneça o valor
+                    final.
+                </p>
+            </div>
+        </fieldset>
+        <div id="results">
+            <div id="infoTable"></div>
+            <div id="resultTable"></div>
+            <div id="priceTable"></div>
+        </div>
+
+        <script src="LCG.js"></script>
+        <script src="cdc.js"></script>
+        <script src="cgi.js"></script>
+        <script src="rational.js"></script>
+
+        <script type="text/javascript">
+            dragAndSave("#cdcfieldset"); // $("#cdcfieldset").draggable()
+
+            webshims.setOptions("forms-ext", {
+                replaceUI: "auto",
+                types: "number",
+            });
+            webshims.polyfill("forms forms-ext");
+        </script>
+    </body>
+</html>
