@@ -46,6 +46,7 @@ function priceTable(numParcelas, valorFinanciado, prestacao, table, jurosTotal){
 }
 
 function infoTable(numParcelas, taxaJuros, valorFinanciado, valorFinal, valorVoltar, mesesVoltar, entrada){
+    console.log("infos: --->>>", numParcelas, taxaJuros, valorFinanciado, valorFinal, valorVoltar,mesesVoltar, entrada);
     let infos = `
     <p>Parcelamento: ${entrada ? "1+" : ""}${numParcelas} meses</p>
     <p>Taxa: ${(taxaJuros * 100).toFixed(2)}% ao mês = ${(((1+taxaJuros)**12 -1)*100).toFixed(2)}% ao ano</p>

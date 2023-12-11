@@ -97,46 +97,47 @@ function priceTable($numParcelas, $valorFinanciado, $taxaJuros, $prestacao) {
     return [$table, $jurosTotal];
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $n = isset($_POST["np"]) ? intval($_POST["np"]) - (isset($_POST["dp"]) ? 1 : 0) : 0;
+    
+    $numParcelas = intval($_POST['np']);
+    $taxaJuros = floatval($_POST['tax']) / 100;
+    $valorFinanciado = floatval($_POST['pv']) / 1;
+    $valorFinal = isset($_POST['pp']) ? floatval($_POST['pp']) : 0;
+    $valorVoltar = isset($_POST['pb']) ? floatval($_POST['pb']) : 0;
+    $mesesVoltar = isset($_POST['mesesVoltar']) ? intval($_POST['mesesVoltar']) : 0;
+    $entrada = isset($_POST["dp"]) ? 1 : 0;
 
-    if (floatval($_POST["tax"]) == 0 && isset($_POST["pp"]) == 0) {
+    if ($taxaJuros == 0 && $valorFinal == 0) {
         echo json_encode(["error" => "Taxa de juros e valor final não podem ser ambos nulos."]);
         exit;
     }
 
-    if (floatval($_POST["tax"]) == 0 && isset($_POST["pv"]) == 0) {
+    if ($taxaJuros == 0 && $valorFinanciado == 0) {
         echo json_encode(["error" => "Taxa de juros e valor financiado não podem ser ambos nulos."]);
         exit;
     }
 
-    if (floatval($_POST["tax"]) == 0 && !isset($_POST["pp"])) {
+    if (!$valorFinanciado && !$valorFinal) {
         echo json_encode(["error" => "Valor financiado e valor final não podem ser ambos nulos."]);
         exit;
     }
 
-    if (intval($_POST["np"]) < 0 || floatval($_POST["tax"]) < 0 || isset($_POST["pv"]) < 0 )  {
+    if ($numParcelas < 0 || $taxaJuros < 0 || $valorFinanciado < 0 )  {
         echo json_encode(["error" => "Nenhum valor de entrada pode ser negativo."]);
         exit;
     }
 
-    if (isset($_POST["pp"]) < 0 || isset($_POST["pb"]) < 0 || intval($_POST["mesesVoltar"]) < 0 )  {
+    if ($valorFinal < 0 || $valorVoltar < 0 || $mesesVoltar < 0 )  {
         echo json_encode(["error" => "Nenhum valor de entrada pode ser negativo."]);
         exit;
     }
 
-    if (intval($_POST["mesesVoltar"]) == 0 && isset($_POST["pb"]) == 0) {
+    if ($mesesVoltar == 0 && $numParcelas == 0) {
         echo json_encode(["error" => "Meses a voltar não pode ser maior do que o número de parcelas."]);
         exit;
     }
-
-    $numParcelas = intval($_POST['np']);
-    $taxaJuros = floatval($_POST['tax']) / 100;
-    $valorFinanciado = floatval($_POST['pv']) / 1;
-    $valorFinal = floatval($_POST['pp']) ?? 0;
-    $valorVoltar = floatval($_POST['pb']) ?? 0;
-    $mesesVoltar = intval($_POST['mesesVoltar']) ?? 0;
-    $entrada = isset($_POST["dp"]) ? 1 : 0;
 
     if ($valorFinanciado == 0) {
         $valorFinanciado = presentValue($valorFinal, $numParcelas, $taxaJuros)[1];

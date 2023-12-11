@@ -7,7 +7,7 @@ $(document).ready(function () {
 
     $.ajax({
       type: "POST",
-      url: "../api/server.php",
+      url: "../api/index.php",
       data: formData,
       success: function (data) {
         $("#cdcfieldset").hide();
