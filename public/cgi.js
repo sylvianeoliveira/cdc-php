@@ -1,4 +1,4 @@
-function priceTable(numParcelas, valorFinanciado, prestacao, table){
+function priceTable(numParcelas, valorFinanciado, prestacao, table, jurosTotal){
     let tableTags = `
         <p>Tabela Price</p>
         <table>
@@ -53,7 +53,7 @@ function infoTable(numParcelas, taxaJuros, valorFinanciado, valorFinal, valorVol
     <p>Valor Final: $${parseFloat(valorFinal).toFixed(2)}</p>
     <p>Valor a Voltar: $${parseFloat(valorVoltar).toFixed(2)}</p>
     <p>Meses a Voltar: ${mesesVoltar}</p>
-    <p>Entrada: ${entrada}</p>
+    <p>Entrada: ${$("#idp").is(":checked")}</p>
     `;
     return infos;
 }
